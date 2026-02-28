@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khám phá trường đại học — UniversityHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d0d0d;
+  --cream: #faf8f3;
+  --gold: #c9a84c;
+  --gold-light: #e8d5a3;
+  --rust: #c0392b;
+  --mist: #e8e4dc;
+  --text-muted: #6b6560;
+  --sidebar-w: 280px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--cream); color: var(--ink); }
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 3rem;
+  background: rgba(250,248,243,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--mist);
+}
+.logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900; text-decoration: none; color: var(--ink); }
+.logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+.page-header {
+  background: linear-gradient(135deg, #1a1208 0%, #2d1e0a 100%);
+  padding: 3.5rem 3rem;
+  color: white;
+}
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem;
+}
+.page-header p { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
+
+.main-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - 200px);
+  max-width: 1300px;
+  margin: 0 auto;
+  gap: 0;
+}
+
+/* SIDEBAR */
+.sidebar {
+  background: white;
+  border-right: 1px solid var(--mist);
+  padding: 2rem;
+  position: sticky;
+  top: 73px;
+  height: calc(100vh - 73px);
+  overflow-y: auto;
+}
+
+.filter-section { margin-bottom: 2rem; }
+.filter-section h3 {
+  font-size: 0.75rem; font-weight: 600;
+  color: var(--gold); letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--mist);
+}
+
+.filter-option {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  user-select: none;
+}
+.filter-option input[type="checkbox"] { display: none; }
+.checkbox-custom {
+  width: 18px; height: 18px;
+  border: 2px solid var(--mist);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.filter-option input:checked + .checkbox-custom {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.filter-option input:checked + .checkbox-custom::after {
+  content: '✓'; color: white; font-size: 0.7rem; font-weight: 700;
+}
+.filter-label { font-size: 0.88rem; color: var(--ink); }
+.filter-count {
+  margin-left: auto;
+  font-size: 0.75rem; color: var(--text-muted);
+  background: var(--mist); padding: 0.1rem 0.5rem;
+  border-radius: 100px;
+}
+
+.clear-btn {
+  width: 100%;
+  padding: 0.7rem;
+  background: none; border: 1.5px solid var(--mist);
+  border-radius: 8px; cursor: pointer;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 0.85rem; color: var(--text-muted);
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+.clear-btn:hover { border-color: var(--rust); color: var(--rust); }
+
+/* CONTENT */
+.content { padding: 2rem; }
+
+.toolbar {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-bar {
+  flex: 1; min-width: 250px;
+  display: flex; gap: 0;
+  background: white;
+  border: 1.5px solid var(--mist);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.search-bar input {
+  flex: 1; padding: 0.75rem 1rem;
+  border: none; outline: none;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 0.9rem;
+}
+.search-bar button {
+  padding: 0.75rem 1rem;
+  background: var(--gold); border: none; cursor: pointer; color: white;
+}
+
+.result-count { font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; }
+
+.sort-select {
+  padding: 0.7rem 1rem;
+  border: 1.5px solid var(--mist);
+  border-radius: 8px; outline: none;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 0.85rem; background: white; cursor: pointer;
+}
+
+.active-filters {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  min-height: 30px;
+}
+
+.active-tag {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--gold-light); color: #7a5c1e;
+  border-radius: 100px; font-size: 0.8rem; font-weight: 500;
+}
+.active-tag button {
+  background: none; border: none; cursor: pointer;
+  color: #7a5c1e; font-size: 0.9rem; line-height: 1; padding: 0;
+}
+
+/* UNIVERSITY CARDS */
+.unis-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.uni-card {
+  background: white;
+  border: 1px solid var(--mist);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+  transition: all 0.25s;
+  cursor: pointer;
+  text-decoration: none; color: inherit;
+  animation: slideIn 0.3s ease both;
+}
+.uni-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 8px 30px rgba(201,168,76,0.12);
+  transform: translateX(4px);
+}
+
+.uni-avatar {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #2d1e0a, #5a3a14);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; color: var(--gold); font-weight: 700;
+  flex-shrink: 0;
+}
+
+.uni-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+.uni-info .location {
+  font-size: 0.82rem; color: var(--text-muted);
+  display: flex; align-items: center; gap: 0.3rem;
+  margin-bottom: 0.7rem;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag {
+  padding: 0.2rem 0.7rem;
+  background: var(--mist);
+  border-radius: 100px;
+  font-size: 0.73rem; color: var(--text-muted);
+}
+
+.uni-scores { text-align: right; min-width: 120px; }
+.score-item { margin-bottom: 0.5rem; }
+.score-label { font-size: 0.72rem; color: var(--text-muted); }
+.score-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; font-weight: 700; color: var(--gold);
+}
+.detail-btn {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--gold); color: white;
+  border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+  white-space: nowrap;
+}
+
+.no-results {
+  text-align: center; padding: 4rem 2rem;
+  color: var(--text-muted);
+}
+.no-results .icon { font-size: 3rem; margin-bottom: 1rem; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 900px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--mist); }
+  .uni-card { grid-template-columns: 48px 1fr; }
+  .uni-scores { display: none; }
+  nav { padding: 1rem 1.5rem; }
+  .page-header { padding: 2.5rem 1.5rem; }
+  .content { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">University<span>Hub</span></a>
+  <ul class="nav-links">
+    <li><a href="filter.html" class="active">Khám phá trường</a></li>
+    <li><a href="compare.html">So sánh</a></li>
+    <li><a href="about.html">Giới thiệu</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <h1>Khám phá trường đại học</h1>
+  <p>Tìm kiếm và lọc trường phù hợp với bạn</p>
+</div>
+
+<div class="main-layout">
+  <aside class="sidebar">
+    <div class="filter-section">
+      <h3>Lĩnh vực đào tạo</h3>
+      <label class="filter-option">
+        <input type="checkbox" name="tag" value="Kỹ thuật" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Kỹ thuật</span>
+        <span class="filter-count">24</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="tag" value="Kinh tế" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Kinh tế</span>
+        <span class="filter-count">31</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="tag" value="Y dược" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Y dược</span>
+        <span class="filter-count">12</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="tag" value="CNTT" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Công nghệ thông tin</span>
+        <span class="filter-count">28</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="tag" value="Luật" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Luật</span>
+        <span class="filter-count">8</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="tag" value="Quốc tế" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Quốc tế</span>
+        <span class="filter-count">15</span>
+      </label>
+    </div>
+
+    <div class="filter-section">
+      <h3>Khu vực</h3>
+      <label class="filter-option">
+        <input type="checkbox" name="region" value="Hà Nội" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Hà Nội</span>
+        <span class="filter-count">45</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="region" value="TP.HCM" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">TP.HCM</span>
+        <span class="filter-count">52</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="region" value="Đà Nẵng" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Đà Nẵng</span>
+        <span class="filter-count">18</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="region" value="Khác" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Khác</span>
+        <span class="filter-count">64</span>
+      </label>
+    </div>
+
+    <div class="filter-section">
+      <h3>Điểm chuẩn THPT</h3>
+      <label class="filter-option">
+        <input type="checkbox" name="score" value="high" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">≥ 27 điểm</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="score" value="mid" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">24 – 27 điểm</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="score" value="low" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">< 24 điểm</span>
+      </label>
+    </div>
+
+    <div class="filter-section">
+      <h3>Khối thi (Tổ hợp)</h3>
+      <label class="filter-option">
+        <input type="checkbox" name="block" value="A00" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Khối A00 (Toán, Lý, Hóa)</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="block" value="A01" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Khối A01 (Toán, Lý, Anh)</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="block" value="B00" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Khối B00 (Toán, Hóa, Sinh)</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="block" value="C00" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Khối C00 (Văn, Sử, Địa)</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="block" value="D01" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Khối D01 (Toán, Văn, Anh)</span>
+      </label>
+    </div>
+
+    <div class="filter-section">
+      <h3>Kỳ thi năng lực</h3>
+      <label class="filter-option">
+        <input type="checkbox" name="exam" value="TSA" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Có xét TSA (ĐGTD)</span>
+        <span class="filter-count">24</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="exam" value="HSA" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Có xét HSA (ĐGNL HN)</span>
+        <span class="filter-count">35</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="exam" value="APT" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Có xét APT (ĐGNL HCM)</span>
+        <span class="filter-count">28</span>
+      </label>
+      <label class="filter-option">
+        <input type="checkbox" name="exam" value="SAT" onchange="applyFilters()">
+        <span class="checkbox-custom"></span>
+        <span class="filter-label">Có xét SAT / ACT quốc tế</span>
+        <span class="filter-count">15</span>
+      </label>
+    </div>
+
+    <button class="clear-btn" onclick="clearFilters()">✕ Xóa tất cả bộ lọc</button>
+  </aside>
+
+  <div class="content">
+    <div class="toolbar">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Tìm tên trường, ngành học..." oninput="applyFilters()">
+        <button>🔍</button>
+      </div>
+      <span class="result-count" id="resultCount">Hiển thị 8 trường</span>
+      <select class="sort-select" onchange="applyFilters()">
+        <option value="name">Sắp xếp: Tên A–Z</option>
+        <option value="score">Sắp xếp: Điểm cao nhất</option>
+        <option value="score_asc">Sắp xếp: Điểm thấp nhất</option>
+      </select>
+    </div>
+
+    <div class="active-filters" id="activeFilters"></div>
+
+    <div class="unis-list" id="uniList"></div>
+  </div>
+</div>
+
+<script>
+const UNIVERSITIES = [
+  { id: 1, abbr: 'BK', name: 'Đại học Bách Khoa Hà Nội', location: 'Hà Nội', tags: ['Kỹ thuật', 'CNTT'], topScore: 28.5, topField: 'Khoa học MT', blocks: ['A00','A01','D01'], exams: ['TSA'] },
+  { id: 2, abbr: 'NEU', name: 'Đại học Kinh tế Quốc dân', location: 'Hà Nội', tags: ['Kinh tế', 'Quốc tế'], topScore: 28.2, topField: 'QHCC', blocks: ['A00','A01','D01','C01'], exams: ['HSA','TSA','SAT'] },
+  { id: 3, abbr: 'HMU', name: 'Đại học Y Hà Nội', location: 'Hà Nội', tags: ['Y dược'], topScore: 28.8, topField: 'Tâm lý (C00)', blocks: ['B00','C00'], exams: [] },
+  { id: 4, abbr: 'FTU', name: 'Đại học Ngoại thương', location: 'Hà Nội', tags: ['Kinh tế', 'Quốc tế'], topScore: 28.7, topField: 'Ngôn ngữ Trung', blocks: ['A00','A01','D01','D03'], exams: ['HSA','SAT'] },
+  { id: 5, abbr: 'VNU', name: 'Đại học Quốc gia Hà Nội', location: 'Hà Nội', tags: ['CNTT', 'Kinh tế', 'Luật'], topScore: 27.0, topField: 'Luật', blocks: ['A00','A01','D01','C00'], exams: ['HSA'] },
+  { id: 6, abbr: 'UEH', name: 'Đại học Kinh tế TP.HCM', location: 'TP.HCM', tags: ['Kinh tế', 'Quốc tế'], topScore: 26.5, topField: 'Marketing CLC', blocks: ['A00','A01','D01','C01'], exams: ['APT','SAT'] },
+  { id: 7, abbr: 'UIT', name: 'Đại học CNTT TP.HCM', location: 'TP.HCM', tags: ['CNTT'], topScore: 25.8, topField: 'ATTT CLC', blocks: ['A00','A01'], exams: ['APT'] },
+  { id: 8, abbr: 'DUT', name: 'Đại học Bách Khoa Đà Nẵng', location: 'Đà Nẵng', tags: ['Kỹ thuật', 'CNTT'], topScore: 24.3, topField: 'CNTT CLC', blocks: ['A00','A01','B00'], exams: [] },
+  { id: 9, abbr: 'VLU', name: 'Đại học Văn Lang', location: 'TP.HCM', tags: ['Quốc tế', 'Y dược'], topScore: 21.0, topField: 'Thiết kế', blocks: ['A00','D01'], exams: ['SAT'] },
+  { id: 10, abbr: 'PTIT', name: 'Học viện Công nghệ BCVT', location: 'Hà Nội', tags: ['CNTT', 'Kỹ thuật'], topScore: 24.5, topField: 'CNTT', blocks: ['A00','A01','D01'], exams: ['TSA'] },
+  { id: 11, abbr: 'HL', name: 'Đại học Hoa Lư', location: 'Khác', tags: ['Kinh tế'], topScore: 18.5, topField: 'Kinh tế', blocks: ['A00','D01'], exams: [] },
+  { id: 12, abbr: 'DL', name: 'Đại học Đà Lạt', location: 'Khác', tags: ['Kinh tế', 'CNTT'], topScore: 19.8, topField: 'Kinh tế', blocks: ['A00','D01'], exams: [] },
+];
+
+function applyFilters() {
+  const searchQ = document.getElementById('searchInput').value.toLowerCase();
+  const checkedTags = [...document.querySelectorAll('input[name="tag"]:checked')].map(e => e.value);
+  const checkedRegions = [...document.querySelectorAll('input[name="region"]:checked')].map(e => e.value);
+  const checkedScores = [...document.querySelectorAll('input[name="score"]:checked')].map(e => e.value);
+  const checkedBlocks = [...document.querySelectorAll('input[name="block"]:checked')].map(e => e.value);
+  const checkedExams = [...document.querySelectorAll('input[name="exam"]:checked')].map(e => e.value);
+  const sort = document.querySelector('.sort-select').value;
+
+  let filtered = UNIVERSITIES.filter(u => {
+    const matchSearch = !searchQ || u.name.toLowerCase().includes(searchQ) || u.tags.some(t => t.toLowerCase().includes(searchQ));
+    const matchTag = checkedTags.length === 0 || checkedTags.some(t => u.tags.includes(t));
+    const matchRegion = checkedRegions.length === 0 || checkedRegions.includes(u.location);
+    const matchBlock = checkedBlocks.length === 0 || checkedBlocks.some(b => u.blocks.includes(b));
+    const matchExam = checkedExams.length === 0 || checkedExams.some(e => u.exams.includes(e));
+    let matchScore = true;
+    if (checkedScores.length > 0) {
+      matchScore = checkedScores.some(s => {
+        if (s === 'high') return u.topScore >= 27;
+        if (s === 'mid') return u.topScore >= 24 && u.topScore < 27;
+        if (s === 'low') return u.topScore < 24;
+      });
+    }
+    return matchSearch && matchTag && matchRegion && matchScore && matchBlock && matchExam;
+  });
+
+  if (sort === 'score') filtered.sort((a,b) => b.topScore - a.topScore);
+  else if (sort === 'score_asc') filtered.sort((a,b) => a.topScore - b.topScore);
+  else filtered.sort((a,b) => a.name.localeCompare(b.name, 'vi'));
+
+  renderList(filtered);
+  renderActiveTags(checkedTags, checkedRegions, checkedScores, checkedBlocks, checkedExams);
+  document.getElementById('resultCount').textContent = `Hiển thị ${filtered.length} trường`;
+}
+
+function renderList(unis) {
+  const list = document.getElementById('uniList');
+  if (unis.length === 0) {
+    list.innerHTML = `<div class="no-results"><div class="icon">🔍</div><p>Không tìm thấy trường phù hợp.<br>Thử thay đổi bộ lọc của bạn.</p></div>`;
+    return;
+  }
+  list.innerHTML = unis.map((u, i) => {
+    const examBadges = u.exams.length > 0 ? u.exams.map(e => `<span class="tag" style="background:#f0fff4;color:#166534">${e}</span>`).join('') : '';
+    const blockBadges = u.blocks.slice(0,3).map(b => `<span class="tag">${b}</span>`).join('');
+    return `
+    <a href="university-detail.html" class="uni-card" style="animation-delay:${i*0.05}s">
+      <div class="uni-avatar">${u.abbr}</div>
+      <div class="uni-info">
+        <h3>${u.name}</h3>
+        <div class="location">📍 ${u.location}</div>
+        <div class="tags">${u.tags.map(t => `<span class="tag">${t}</span>`).join('')} ${blockBadges} ${examBadges}</div>
+      </div>
+      <div class="uni-scores">
+        <div class="score-item">
+          <div class="score-label">${u.topField}</div>
+          <div class="score-value">${u.topScore}</div>
+        </div>
+        <div class="detail-btn">Xem chi tiết →</div>
+      </div>
+    </a>
+  `}).join('');
+}
+
+function renderActiveTags(tags, regions, scores, blocks, exams) {
+  const cont = document.getElementById('activeFilters');
+  const scoreLabel = { high: '≥27 điểm', mid: '24–27 điểm', low: '<24 điểm' };
+  const all = [
+    ...tags.map(t => ({ label: t, type: 'tag', value: t })),
+    ...regions.map(r => ({ label: r, type: 'region', value: r })),
+    ...scores.map(s => ({ label: scoreLabel[s], type: 'score', value: s })),
+    ...(blocks||[]).map(b => ({ label: 'Khối '+b, type: 'block', value: b })),
+    ...(exams||[]).map(e => ({ label: e, type: 'exam', value: e })),
+  ];
+  cont.innerHTML = all.map(item => `
+    <span class="active-tag">${item.label}
+      <button onclick="removeFilter('${item.type}','${item.value}')">×</button>
+    </span>
+  `).join('');
+}
+
+function removeFilter(type, value) {
+  const input = document.querySelector(`input[name="${type}"][value="${value}"]`);
+  if (input) { input.checked = false; applyFilters(); }
+}
+
+function clearFilters() {
+  document.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+  document.getElementById('searchInput').value = '';
+  applyFilters();
+}
+
+// Check URL param
+const urlParams = new URLSearchParams(window.location.search);
+const q = urlParams.get('q');
+if (q) document.getElementById('searchInput').value = q;
+
+applyFilters();
+</script>
+</body>
+</html>
