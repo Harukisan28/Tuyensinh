@@ -208,6 +208,27 @@ nav {
   .container { padding: 1.5rem; }
   nav { padding: 1rem 1.5rem; }
 }
+    /* FOOTER */
+footer {
+  background: #1a1208; color: white;
+  padding: 3rem 6rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900; text-decoration: none; color: white; }
+.footer-logo span { color: var(--gold); }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a { font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--gold); }
+.footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+@media (max-width: 900px) {
+  .mission-grid, .contact-grid { grid-template-columns: 1fr; }
+  .values-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr 1fr; }
+  .about-hero, .mission, .values, .team, .contact, footer { padding: 3rem 1.5rem; }
+  nav { padding: 1rem 1.5rem; }
+  footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+}
 </style>
 </head>
 <body>
@@ -269,6 +290,7 @@ nav {
     <button class="modal-close" onclick="closeModal()">Đóng</button>
   </div>
 </div>
+
 
 <script>
 const UNI_DATA = [
