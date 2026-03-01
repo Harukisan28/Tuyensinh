@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khám phá trường — TuyenSinh367</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--cream:#faf8f3;--gold:#c9a84c;--gold-l:#e8d5a3;--mist:#e8e4dc;--mu:#6b6560;--sw:310px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);color:var(--ink)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;background:rgba(250,248,243,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--mist)}
+.logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;text-decoration:none;color:var(--ink)}.logo span{color:var(--gold)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--mu);text-decoration:none;transition:color .2s}.nav-links a:hover,.nav-links a.on{color:var(--gold)}
+
+/* HEADER */
+.ph{background:linear-gradient(135deg,#1a1208,#2d1e0a);padding:2.8rem 3rem;color:white}
+.ph h1{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;margin-bottom:.35rem}
+.ph p{color:rgba(255,255,255,.6);font-size:.92rem}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:calc(100vh - 160px);max-width:1400px;margin:0 auto}
+
+/* ══ SIDEBAR ══ */
+.sb{background:white;border-right:1px solid var(--mist);padding:1.4rem;position:sticky;top:73px;height:calc(100vh - 73px);overflow-y:auto}
+.fsec{margin-bottom:1.7rem}
+.fsec h3{font-size:.71rem;font-weight:600;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--mist)}
+
+/* Checkbox */
+.fopt{display:flex;align-items:center;gap:.5rem;padding:.35rem 0;cursor:pointer;user-select:none}
+.fopt input{display:none}
+.cb{width:17px;height:17px;border:2px solid var(--mist);border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.fopt input:checked+.cb{background:var(--gold);border-color:var(--gold)}
+.fopt input:checked+.cb::after{content:'✓';color:white;font-size:.65rem;font-weight:700}
+.fl{font-size:.84rem}.fc{margin-left:auto;font-size:.71rem;color:var(--mu);background:var(--mist);padding:.07rem .42rem;border-radius:100px}
+
+/* ══ ĐIỂM THI PANEL ══ */
+.score-panel{background:#fdfaf4;border:1.5px solid var(--mist);border-radius:12px;padding:1rem}
+.sp-label{font-size:.75rem;font-weight:600;color:var(--ink);margin-bottom:.7rem}
+
+/* Môn thi buttons */
+.subj-grid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-bottom:.8rem}
+.sbtn{padding:.45rem .3rem;background:white;border:1.5px solid var(--mist);border-radius:8px;cursor:pointer;font-family:inherit;font-size:.76rem;font-weight:500;color:var(--mu);text-align:center;transition:all .18s;line-height:1.2}
+.sbtn:hover{border-color:var(--gold);color:var(--gold)}
+.sbtn.sel{background:var(--gold);border-color:var(--gold);color:white;font-weight:600}
+
+/* Score rows */
+.score-rows{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.8rem}
+.score-row{display:grid;grid-template-columns:80px 1fr 20px;align-items:center;gap:.4rem}
+.sr-name{font-size:.77rem;font-weight:600;color:var(--ink)}
+.sr-inp{padding:.4rem .6rem;border:1.5px solid var(--mist);border-radius:7px;outline:none;font-family:inherit;font-size:.88rem;width:100%;background:white}
+.sr-inp:focus{border-color:var(--gold)}
+.sr-rm{background:none;border:none;cursor:pointer;color:var(--mu);font-size:1rem;transition:color .15s;line-height:1}.sr-rm:hover{color:#c0392b}
+
+/* Detected blocks */
+.blk-area{margin:.6rem 0}
+.blk-lbl{font-size:.71rem;color:var(--mu);margin-bottom:.35rem}
+.blk-badges{display:flex;flex-wrap:wrap;gap:.3rem}
+.blkb{padding:.2rem .6rem;background:var(--gold-l);color:#7a5c1e;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .18s}
+.blkb:hover{border-color:var(--gold)}
+.blkb.ab{background:var(--gold);color:white;border-color:var(--gold)}
+
+/* Total box */
+.total-box{background:linear-gradient(135deg,#2d1e0a,#5a3a14);border-radius:10px;padding:.85rem;text-align:center;color:white}
+.tot-lbl{font-size:.71rem;color:rgba(255,255,255,.6);margin-bottom:.15rem}
+.tot-val{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:var(--gold)}
+.tot-sub{font-size:.69rem;color:rgba(255,255,255,.5);margin-top:.1rem}
+
+.clear-btn{width:100%;padding:.6rem;background:none;border:1.5px solid var(--mist);border-radius:8px;cursor:pointer;font-family:inherit;font-size:.82rem;color:var(--mu);transition:all .2s;margin-top:1rem}
+.clear-btn:hover{border-color:#c0392b;color:#c0392b}
+
+/* ══ CONTENT ══ */
+.content{padding:1.5rem 2rem}
+.toolbar{display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;flex-wrap:wrap}
+.searchbar{flex:1;min-width:200px;display:flex;background:white;border:1.5px solid var(--mist);border-radius:10px;overflow:hidden}
+.searchbar input{flex:1;padding:.68rem 1rem;border:none;outline:none;font-family:inherit;font-size:.88rem}
+.searchbar button{padding:.68rem 1rem;background:var(--gold);border:none;cursor:pointer;color:white}
+.sortsel{padding:.62rem .85rem;border:1.5px solid var(--mist);border-radius:8px;outline:none;font-family:inherit;font-size:.82rem;background:white;cursor:pointer}
+.rcnt{font-size:.81rem;color:var(--mu);white-space:nowrap}
+
+/* Active filter tags */
+.atags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.8rem;min-height:22px}
+.atag{display:flex;align-items:center;gap:.28rem;padding:.22rem .65rem;background:var(--gold-l);color:#7a5c1e;border-radius:100px;font-size:.75rem;font-weight:500}
+.atag button{background:none;border:none;cursor:pointer;color:#7a5c1e;font-size:.85rem;line-height:1;padding:0}
+
+/* Match banner */
+.mbanner{display:none;background:linear-gradient(90deg,#f0fff4,#dcfce7);border:1px solid #86efac;border-radius:10px;padding:.65rem 1rem;margin-bottom:.9rem;font-size:.82rem;color:#166534;align-items:center;gap:.5rem}
+.mbanner.show{display:flex}
+
+/* UNI CARDS */
+.ulist{display:flex;flex-direction:column;gap:.8rem}
+.ucard{background:white;border:1px solid var(--mist);border-radius:13px;padding:1.2rem 1.3rem;display:grid;grid-template-columns:54px 1fr auto;gap:1.1rem;align-items:center;text-decoration:none;color:inherit;transition:all .22s;animation:si .22s ease both}
+.ucard:hover{border-color:var(--gold);box-shadow:0 5px 22px rgba(201,168,76,.13);transform:translateX(3px)}
+.ucard.mh{border-color:#86efac;background:#f0fff4}
+.ucard.mh:hover{border-color:#22c55e}
+
+.uav{width:54px;height:54px;background:linear-gradient(135deg,#2d1e0a,#5a3a14);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gold);font-weight:700;flex-shrink:0}
+.ui h3{font-size:.94rem;font-weight:600;margin-bottom:.25rem}
+.ui .loc{font-size:.77rem;color:var(--mu);margin-bottom:.55rem}
+.utags{display:flex;flex-wrap:wrap;gap:.28rem}
+.utag{padding:.13rem .55rem;background:var(--mist);border-radius:100px;font-size:.69rem;color:var(--mu)}
+.utag.bt{background:#e0f2fe;color:#0369a1}
+.utag.et{background:#f0fff4;color:#166534}
+.utag.mt{background:#dcfce7;color:#166534;font-weight:600}
+
+.uscr{text-align:right;min-width:105px}
+.sv{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold)}
+.sl{font-size:.69rem;color:var(--mu)}
+.ms{font-size:.73rem;color:#166534;font-weight:600;background:#dcfce7;padding:.13rem .48rem;border-radius:5px;display:inline-block;margin-top:.3rem}
+.dbtn{display:inline-flex;align-items:center;gap:.28rem;margin-top:.55rem;padding:.35rem .85rem;background:var(--gold);color:white;border-radius:7px;font-size:.75rem;font-weight:600}
+
+.nores{text-align:center;padding:4rem 2rem;color:var(--mu)}
+.nores .ic{font-size:2.6rem;margin-bottom:.7rem}
+
+@keyframes si{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sb{position:static;height:auto;border-right:none;border-bottom:1px solid var(--mist)}
+  .ucard{grid-template-columns:44px 1fr}.uscr{display:none}
+  nav{padding:1rem 1.5rem}.ph{padding:2.2rem 1.5rem}.content{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">TuyenSinh<span>367</span></a>
+  <ul class="nav-links">
+    <li><a href="filter.html" class="on">Khám phá</a></li>
+    <li><a href="compare.html">So sánh</a></li>
+    <li><a href="about.html">Giới thiệu</a></li>
+  </ul>
+</nav>
+
+<div class="ph">
+  <h1>Khám phá trường đại học</h1>
+  <p>Nhập điểm thi THPT để tìm trường phù hợp với bạn</p>
+</div>
+
+<div class="layout">
+<!-- ══════ SIDEBAR ══════ -->
+<aside class="sb">
+
+  <!-- ĐIỂM THI THPT -->
+  <div class="fsec">
+    <h3>🎯 Điểm thi THPT của bạn</h3>
+    <div class="score-panel">
+      <div class="sp-label">Chọn các môn đã thi:</div>
+      <div class="subj-grid" id="subjGrid"></div>
+
+      <div class="score-rows" id="scoreRows">
+        <span style="font-size:.74rem;color:var(--mu);text-align:center">Chưa chọn môn nào</span>
+      </div>
+
+      <div class="blk-area" id="blkArea" style="display:none">
+        <div class="blk-lbl">Tổ hợp khối phù hợp — bấm để lọc:</div>
+        <div class="blk-badges" id="blkBadges"></div>
+      </div>
+
+      <div class="total-box" id="totBox" style="display:none">
+        <div class="tot-lbl">Tổng điểm 3 môn</div>
+        <div class="tot-val" id="totVal">0.0</div>
+        <div class="tot-sub" id="totSub"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LĨNH VỰC -->
+  <div class="fsec">
+    <h3>📚 Lĩnh vực</h3>
+    <label class="fopt"><input type="checkbox" name="tag" value="Kỹ thuật" onchange="go()"><span class="cb"></span><span class="fl">Kỹ thuật</span><span class="fc">24</span></label>
+    <label class="fopt"><input type="checkbox" name="tag" value="Kinh tế"  onchange="go()"><span class="cb"></span><span class="fl">Kinh tế</span><span class="fc">31</span></label>
+    <label class="fopt"><input type="checkbox" name="tag" value="Y dược"   onchange="go()"><span class="cb"></span><span class="fl">Y dược</span><span class="fc">12</span></label>
+    <label class="fopt"><input type="checkbox" name="tag" value="CNTT"     onchange="go()"><span class="cb"></span><span class="fl">Công nghệ thông tin</span><span class="fc">28</span></label>
+    <label class="fopt"><input type="checkbox" name="tag" value="Luật"     onchange="go()"><span class="cb"></span><span class="fl">Luật</span><span class="fc">8</span></label>
+    <label class="fopt"><input type="checkbox" name="tag" value="Quốc tế"  onchange="go()"><span class="cb"></span><span class="fl">Quốc tế</span><span class="fc">15</span></label>
+  </div>
+
+  <!-- KHU VỰC -->
+  <div class="fsec">
+    <h3>📍 Khu vực</h3>
+    <label class="fopt"><input type="checkbox" name="reg" value="Hà Nội"   onchange="go()"><span class="cb"></span><span class="fl">Hà Nội</span><span class="fc">45</span></label>
+    <label class="fopt"><input type="checkbox" name="reg" value="TP.HCM"   onchange="go()"><span class="cb"></span><span class="fl">TP.HCM</span><span class="fc">52</span></label>
+    <label class="fopt"><input type="checkbox" name="reg" value="Đà Nẵng"  onchange="go()"><span class="cb"></span><span class="fl">Đà Nẵng</span><span class="fc">18</span></label>
+    <label class="fopt"><input type="checkbox" name="reg" value="Khác"     onchange="go()"><span class="cb"></span><span class="fl">Khác</span><span class="fc">64</span></label>
+  </div>
+
+  <!-- KỲ THI NĂNG LỰC -->
+  <div class="fsec">
+    <h3>🏅 Kỳ thi năng lực</h3>
+    <label class="fopt"><input type="checkbox" name="exam" value="TSA" onchange="go()"><span class="cb"></span><span class="fl">Có xét TSA</span><span class="fc">24</span></label>
+    <label class="fopt"><input type="checkbox" name="exam" value="HSA" onchange="go()"><span class="cb"></span><span class="fl">Có xét HSA</span><span class="fc">35</span></label>
+    <label class="fopt"><input type="checkbox" name="exam" value="APT" onchange="go()"><span class="cb"></span><span class="fl">Có xét APT</span><span class="fc">28</span></label>
+    <label class="fopt"><input type="checkbox" name="exam" value="SAT" onchange="go()"><span class="cb"></span><span class="fl">Có xét SAT/ACT</span><span class="fc">15</span></label>
+  </div>
+
+  <button class="clear-btn" onclick="clearAll()">✕ Xóa tất cả bộ lọc</button>
+</aside>
+
+<!-- ══════ CONTENT ══════ -->
+<div class="content">
+  <div class="toolbar">
+    <div class="searchbar">
+      <input type="text" id="srch" placeholder="Tìm tên trường, ngành..." oninput="go()">
+      <button>🔍</button>
+    </div>
+    <span class="rcnt" id="rcnt"></span>
+    <select class="sortsel" id="sortSel" onchange="go()">
+      <option value="name">Tên A–Z</option>
+      <option value="sd">Điểm cao → thấp</option>
+      <option value="sa">Điểm thấp → cao</option>
+      <option value="match">Phù hợp nhất</option>
+    </select>
+  </div>
+  <div class="atags" id="atags"></div>
+  <div class="mbanner" id="mbanner">✅ <span id="mtext"></span></div>
+  <div class="ulist" id="ulist"></div>
+</div>
+</div>
+
+<script>
+/* ════ SUBJECTS ════ */
+const SUBJS = [
+  {id:'toan',name:'Toán'},{id:'van',name:'Văn'},{id:'ly',name:'Vật Lý'},
+  {id:'hoa',name:'Hóa Học'},{id:'sinh',name:'Sinh Học'},{id:'su',name:'Lịch Sử'},
+  {id:'dia',name:'Địa Lý'},{id:'anh',name:'T.Anh'},{id:'tin',name:'Tin Học'},{id:'gdkt',name:'KT&PL'},
+];
+
+/* ════ KHỐI → danh sách môn bắt buộc ════ */
+const BLOCKS = {
+  'A00':['toan','ly','hoa'],
+  'A01':['toan','ly','anh'],
+  'A02':['toan','ly','sinh'],
+  'B00':['toan','hoa','sinh'],
+  'B03':['toan','sinh','van'],
+  'C00':['van','su','dia'],
+  'C01':['toan','van','ly'],
+  'C02':['toan','van','hoa'],
+  'D01':['toan','van','anh'],
+  'D07':['toan','hoa','anh'],
+  'D08':['toan','sinh','anh'],
+  'D10':['toan','dia','anh'],
+  'V00':['toan','van','anh'],  // Kiến trúc (năng khiếu tính tương đồng)
+};
+
+/* ════ UNIVERSITY DATA ════ */
+const UNI = [
+  {id:'bkhn',abbr:'BK',name:'Đại học Bách Khoa Hà Nội',loc:'Hà Nội',tags:['Kỹ thuật','CNTT'],topScore:29.39,topField:'KH Dữ liệu & AI',blocks:['A00','A01','A02','B00','D01','D07'],exams:['TSA']},
+  {id:'neu', abbr:'NEU',name:'Đại học Kinh tế Quốc dân',loc:'Hà Nội',tags:['Kinh tế','Quốc tế'],topScore:28.18,topField:'Quan hệ Công chúng',blocks:['A00','A01','C01','D01'],exams:['HSA','SAT']},
+  {id:'hmu', abbr:'HMU',name:'Đại học Y Hà Nội',loc:'Hà Nội',tags:['Y dược'],topScore:28.83,topField:'Tâm lý (C00)',blocks:['B00','C00'],exams:[]},
+  {id:'ftu', abbr:'FTU',name:'Đại học Ngoại thương',loc:'Hà Nội',tags:['Kinh tế','Quốc tế'],topScore:28.70,topField:'Ngôn ngữ Trung',blocks:['A00','A01','C01','D01'],exams:['HSA','SAT']},
+  {id:'',    abbr:'VNU',name:'Đại học Quốc gia Hà Nội',loc:'Hà Nội',tags:['CNTT','Kinh tế','Luật'],topScore:27.00,topField:'Luật',blocks:['A00','A01','C00','D01'],exams:['HSA']},
+  {id:'ueh', abbr:'UEH',name:'Đại học Kinh tế TP.HCM',loc:'TP.HCM',tags:['Kinh tế','Quốc tế'],topScore:26.50,topField:'Marketing CLC',blocks:['A00','A01','C01','D01'],exams:['APT','SAT']},
+  {id:'uit', abbr:'UIT',name:'Đại học CNTT TP.HCM',loc:'TP.HCM',tags:['CNTT'],topScore:25.80,topField:'ATTT CLC',blocks:['A00','A01'],exams:['APT']},
+  {id:'dut', abbr:'DUT',name:'Đại học Bách Khoa Đà Nẵng',loc:'Đà Nẵng',tags:['Kỹ thuật','CNTT'],topScore:24.30,topField:'CNTT CLC',blocks:['A00','A01','B00'],exams:[]},
+  {id:'',    abbr:'VLU',name:'Đại học Văn Lang',loc:'TP.HCM',tags:['Quốc tế','Y dược'],topScore:21.00,topField:'Thiết kế',blocks:['A00','D01'],exams:['SAT']},
+  {id:'',    abbr:'PTIT',name:'HV CN Bưu chính Viễn thông',loc:'Hà Nội',tags:['CNTT','Kỹ thuật'],topScore:24.50,topField:'CNTT',blocks:['A00','A01','D01'],exams:['TSA']},
+  {id:'',    abbr:'HANU',name:'Đại học Hà Nội',loc:'Hà Nội',tags:['Quốc tế','Luật'],topScore:26.00,topField:'Ngôn ngữ Anh',blocks:['D01','C01'],exams:['HSA']},
+  {id:'',    abbr:'ĐLạt',name:'Đại học Đà Lạt',loc:'Khác',tags:['Kinh tế','CNTT'],topScore:19.80,topField:'Kinh tế',blocks:['A00','D01'],exams:[]},
+];
+
+/* ════ STATE ════ */
+let sel = {};       // {subjectId: score|''}
+let activeBlk = ''; // active block filter
+
+/* ════ BUILD SUBJECT GRID ════ */
+(function initGrid(){
+  const g = document.getElementById('subjGrid');
+  g.innerHTML = SUBJS.map(s=>`
+    <button class="sbtn" id="sb-${s.id}" onclick="toggleSubj('${s.id}','${s.name}')">${s.name}</button>
+  `).join('');
+})();
+
+function toggleSubj(id, name) {
+  if (sel[id] !== undefined) {
+    delete sel[id];
+    document.getElementById('sb-'+id).classList.remove('sel');
+  } else {
+    if (Object.keys(sel).length >= 4) { alert('Tối đa 4 môn.'); return; }
+    sel[id] = '';
+    document.getElementById('sb-'+id).classList.add('sel');
+  }
+  renderRows(); detectBlocks(); calcTotal(); go();
+}
+
+function renderRows() {
+  const ids = Object.keys(sel);
+  const cont = document.getElementById('scoreRows');
+  if (!ids.length) { cont.innerHTML='<span style="font-size:.74rem;color:var(--mu);text-align:center">Chưa chọn môn nào</span>'; return; }
+  cont.innerHTML = ids.map(id=>{
+    const s = SUBJS.find(x=>x.id===id);
+    const v = sel[id]==='' ? '' : sel[id];
+    return `<div class="score-row">
+      <span class="sr-name">${s.name}</span>
+      <input class="sr-inp" type="number" min="0" max="10" step="0.1" placeholder="0–10" value="${v}"
+        oninput="updScore('${id}',this.value)" onchange="updScore('${id}',this.value)">
+      <button class="sr-rm" onclick="removeSubj('${id}')">×</button>
+    </div>`;
+  }).join('');
+}
+
+function updScore(id, v) {
+  const n = parseFloat(v);
+  sel[id] = isNaN(n) ? '' : Math.min(10, Math.max(0, n));
+  calcTotal(); go();
+}
+
+function removeSubj(id) {
+  delete sel[id];
+  const b = document.getElementById('sb-'+id);
+  if (b) b.classList.remove('sel');
+  renderRows(); detectBlocks(); calcTotal(); go();
+}
+
+/* ════ DETECT BLOCKS ════ */
+function detectBlocks() {
+  const chosen = Object.keys(sel);
+  if (chosen.length < 2) { document.getElementById('blkArea').style.display='none'; activeBlk=''; return; }
+  const matched = [];
+  for (const [code, mobs] of Object.entries(BLOCKS)) {
+    const cnt = mobs.filter(m=>chosen.includes(m)).length;
+    if (cnt >= Math.min(2, mobs.length)) matched.push({code, cnt, total:mobs.length});
+  }
+  matched.sort((a,b)=>b.cnt-a.cnt);
+  const top = matched.filter(x=>x.cnt===matched[0]?.cnt||x.cnt>=2);
+  const area = document.getElementById('blkArea');
+  const badges = document.getElementById('blkBadges');
+  if (top.length) {
+    area.style.display='block';
+    badges.innerHTML = top.map(({code})=>`
+      <span class="blkb ${activeBlk===code?'ab':''}" onclick="selBlk('${code}')">${code}</span>
+    `).join('');
+  } else area.style.display='none';
+}
+
+function selBlk(b) {
+  activeBlk = activeBlk===b ? '' : b;
+  detectBlocks(); go();
+}
+
+/* ════ CALC TOTAL ════ */
+function calcTotal() {
+  const scores = Object.values(sel).map(v=>parseFloat(v)||0);
+  const filled = scores.filter(v=>v>0);
+  const box = document.getElementById('totBox');
+  if (filled.length >= 2) {
+    const top3 = scores.slice(0,3).reduce((a,b)=>a+b,0);
+    document.getElementById('totVal').textContent = top3.toFixed(2);
+    document.getElementById('totSub').textContent = getBlkName() || '3 môn đầu tiên chọn';
+    box.style.display = 'block';
+  } else box.style.display = 'none';
+}
+
+function getBlkName() {
+  const ids = Object.keys(sel).slice(0,3);
+  for (const [code,mobs] of Object.entries(BLOCKS))
+    if (ids.length===mobs.length && mobs.every(m=>ids.includes(m))) return code;
+  return null;
+}
+
+function userTotal() {
+  return Object.values(sel).slice(0,3).map(v=>parseFloat(v)||0).reduce((a,b)=>a+b,0);
+}
+
+/* ════ MAIN FILTER ════ */
+function go() {
+  const q = document.getElementById('srch').value.toLowerCase();
+  const tags = [...document.querySelectorAll('input[name="tag"]:checked')].map(e=>e.value);
+  const regs = [...document.querySelectorAll('input[name="reg"]:checked')].map(e=>e.value);
+  const exams= [...document.querySelectorAll('input[name="exam"]:checked')].map(e=>e.value);
+  const sort = document.getElementById('sortSel').value;
+  const tot = userTotal();
+  const hasScore = Object.keys(sel).length>=2 && tot>0;
+
+  let list = UNI.filter(u=>{
+    const mQ = !q || u.name.toLowerCase().includes(q) || u.tags.some(t=>t.toLowerCase().includes(q));
+    const mT = !tags.length || tags.some(t=>u.tags.includes(t));
+    const mR = !regs.length || regs.includes(u.loc);
+    const mE = !exams.length|| exams.some(e=>u.exams.includes(e));
+    const mB = !activeBlk   || u.blocks.includes(activeBlk);
+    return mQ&&mT&&mR&&mE&&mB;
+  });
+
+  if (sort==='sd') list.sort((a,b)=>b.topScore-a.topScore);
+  else if (sort==='sa') list.sort((a,b)=>a.topScore-b.topScore);
+  else if (sort==='match'&&hasScore) list.sort((a,b)=>Math.abs(a.topScore-tot)-Math.abs(b.topScore-tot));
+  else list.sort((a,b)=>a.name.localeCompare(b.name,'vi'));
+
+  renderList(list, tot, hasScore);
+  renderTags(tags, regs, exams);
+  document.getElementById('rcnt').textContent = `${list.length} trường`;
+
+  const mbanner = document.getElementById('mbanner');
+  if (hasScore) {
+    const nr = list.filter(u=>Math.abs(u.topScore-tot)<=2).length;
+    mbanner.classList.add('show');
+    document.getElementById('mtext').textContent = `Với tổng điểm ${tot.toFixed(2)}, có ${nr} trường trong khoảng điểm ±2 của bạn`;
+  } else mbanner.classList.remove('show');
+}
+
+function renderList(list, tot, hasScore) {
+  const cont = document.getElementById('ulist');
+  if (!list.length) {
+    cont.innerHTML=`<div class="nores"><div class="ic">🔍</div><p>Không tìm thấy trường phù hợp.<br>Thử thay đổi bộ lọc.</p></div>`;
+    return;
+  }
+  cont.innerHTML = list.map((u,i)=>{
+    const isM = hasScore && Math.abs(u.topScore-tot)<=2;
+    const blkT = u.blocks.slice(0,3).map(b=>`<span class="utag bt">${b}</span>`).join('');
+    const exT  = u.exams.map(e=>`<span class="utag et">${e}</span>`).join('');
+    const mT   = isM ? `<span class="utag mt">✅ Trong tầm điểm</span>` : '';
+    const mS   = isM ? `<div class="ms">±${Math.abs(u.topScore-tot).toFixed(2)} điểm</div>` : '';
+
+    // Điều hướng đúng trường nếu có id, ngược lại đến trang default
+    const href = u.id ? `university-detail.html?school=${u.id}` : `university-detail.html`;
+
+    return `<a href="${href}" class="ucard ${isM?'mh':''}" style="animation-delay:${i*.04}s">
+      <div class="uav">${u.abbr}</div>
+      <div class="ui">
+        <h3>${u.name}</h3>
+        <div class="loc">📍 ${u.loc}</div>
+        <div class="utags">${u.tags.map(t=>`<span class="utag">${t}</span>`).join('')} ${blkT} ${exT} ${mT}</div>
+      </div>
+      <div class="uscr">
+        <div class="sl">${u.topField}</div>
+        <div class="sv">${u.topScore}</div>
+        ${mS}
+        <div class="dbtn">Chi tiết →</div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function renderTags(tags, regs, exams) {
+  const all = [
+    ...tags.map(v=>({v,n:'tag',lbl:v})),
+    ...regs.map(v=>({v,n:'reg',lbl:v})),
+    ...exams.map(v=>({v,n:'exam',lbl:v})),
+    ...(activeBlk?[{v:activeBlk,n:'blk',lbl:'Khối '+activeBlk}]:[]),
+  ];
+  document.getElementById('atags').innerHTML = all.map(x=>`
+    <span class="atag">${x.lbl}
+      <button onclick="rmTag('${x.n}','${x.v}')">×</button>
+    </span>`).join('');
+}
+
+function rmTag(n, v) {
+  if (n==='blk') { activeBlk=''; detectBlocks(); go(); return; }
+  const el = document.querySelector(`input[name="${n}"][value="${v}"]`);
+  if (el) { el.checked=false; go(); }
+}
+
+function clearAll() {
+  document.querySelectorAll('input[type="checkbox"]').forEach(i=>i.checked=false);
+  document.getElementById('srch').value='';
+  document.getElementById('sortSel').value='name';
+  sel={}; activeBlk='';
+  document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('sel'));
+  renderRows(); detectBlocks(); calcTotal();
+  document.getElementById('totBox').style.display='none';
+  go();
+}
+
+/* INIT */
+go();
+</script>
+</body>
+</html>
