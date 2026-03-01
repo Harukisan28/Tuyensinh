@@ -121,28 +121,29 @@ nav {
   overflow: hidden;
   animation: fadeUp 0.6s 0.3s ease both;
   border: 1.5px solid var(--mist);
+  max-width: 420px;
 }
 
 .search-box input {
-  flex: 1; padding: 1.1rem 1.5rem;
-  width:300px;
-  height:70px;
+  flex: 1; padding: 0.75rem 1rem;
   border: none; outline: none;
   font-family: 'Be Vietnam Pro', sans-serif;
   font-size: 0.95rem; color: var(--ink);
   background: transparent;
+  min-width: 0;
 }
 
 .search-box input::placeholder { color: #b0a89c; }
 
 .search-btn {
-  padding: 1rem 1.8rem;
+  padding: 0.7rem 1.2rem;
   background: var(--gold);
   border: none; cursor: pointer;
   color: white; font-weight: 600; font-size: 0.9rem;
   font-family: 'Be Vietnam Pro', sans-serif;
   display: flex; align-items: center; gap: 0.5rem;
   transition: background 0.2s;
+  white-space: nowrap; flex-shrink: 0;
 }
 
 .search-btn:hover { background: #b8932e; }
